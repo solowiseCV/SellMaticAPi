@@ -1,0 +1,55 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+model Business {
+  id                  Int      @id @default(autoincrement())
+  businessName        String
+  ownerName           String
+  ownerEmail          String   @unique
+  ownerPhone          String
+  phoneNumberId       String?  @unique
+  wabaId              String?
+  accessToken         String?
+  location            String?
+  deliveryInfo        String?
+  paymentInfo         String?
+  businessDescription String?
+  products            Json     @default("[]")
+  botActive           Boolean  @default(true)
+  botPersonality      String   @default("friendly and professional")
+  plan                String   @default("free_trial")
+  trialEndsAt         DateTime?
+  subscriptionActive  Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  conversations       Conversation[]
+}
+
+model Conversation {
+  id              Int      @id @default(autoincrement())
+  businessId      Int
+  customerPhone   String
+  createdAt       DateTime @default(now())
+  lastMessageAt   DateTime @default(now())
+  business        Business  @relation(fields: [businessId], references: [id])
+  messages        Message[]
+
+  @@unique([businessId, customerPhone])
+}
+
+model Message {
+  id             Int      @id @default(autoincrement())
+  conversationId Int
+  role           String
+  content        String
+  createdAt      DateTime @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+}
