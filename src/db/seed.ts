@@ -10,14 +10,14 @@ async function seed() {
     console.log('🌱 Starting database seed...')
     await client.query('BEGIN')
 
-    console.log('🗑️  Clearing existing data...')
+    console.log('Clearing existing data...')
     await client.query('DELETE FROM "Message"')
     await client.query('DELETE FROM "Conversation"')
     await client.query('DELETE FROM "Business"')
-    console.log('✅ Existing data cleared')
+    console.log('Existing data cleared')
 
     const businessIds = await seedBusinesses(client)
-    console.log(`🏢 Created ${businessIds.length} businesses`)
+    console.log(`Created ${businessIds.length} businesses`)
 
     const conversationIds = await seedConversations(client, businessIds)
     console.log(`💬 Created ${conversationIds.length} conversations`)

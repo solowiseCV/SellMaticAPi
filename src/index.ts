@@ -168,7 +168,7 @@ app.post('/webhook', async (req: Request, res: Response) => {
         if (!business) {
           console.warn('No business found for phoneNumberId', phoneNumberId)
           await client.query('ROLLBACK')
-          client.release()
+          // client.release()
           continue
         }
 
