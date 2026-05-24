@@ -18,7 +18,7 @@ const assistantMessages = [
   'Yes, we ship nationwide. Can I get your delivery address?'
 ]
 
-async function seedMessages(client: PoolClient, conversationIds: number[]): Promise<number> {
+async function seedMessages(client: PoolClient, conversationIds: string[]): Promise<number> {
   let messageCount = 0
 
   for (const conversationId of conversationIds) {

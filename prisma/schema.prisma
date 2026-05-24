@@ -10,10 +10,11 @@ datasource db {
 
 
 model Business {
-  id                  Int      @id @default(autoincrement())
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   businessName        String
   ownerName           String
   ownerEmail          String   @unique
+  password            String
   ownerPhone          String
   phoneNumberId       String?  @unique
   wabaId              String?
@@ -34,8 +35,8 @@ model Business {
 }
 
 model Conversation {
-  id              Int      @id @default(autoincrement())
-  businessId      Int
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  businessId      String   @db.Uuid
   customerPhone   String
   createdAt       DateTime @default(now())
   lastMessageAt   DateTime @default(now())
@@ -46,8 +47,8 @@ model Conversation {
 }
 
 model Message {
-  id             Int      @id @default(autoincrement())
-  conversationId Int
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  conversationId String   @db.Uuid
   role           String
   content        String
   createdAt      DateTime @default(now())

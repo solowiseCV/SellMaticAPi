@@ -1,4 +1,5 @@
 import type { PoolClient } from 'pg'
+import bcrypt from 'bcryptjs'
 
 const businesses = [
   {
@@ -108,21 +109,23 @@ const businesses = [
   }
 ]
 
-async function seedBusinesses(client: PoolClient): Promise<number[]> {
-  const businessIds: number[] = []
+async function seedBusinesses(client: PoolClient): Promise<string[]> {
+  const businessIds: string[] = []
+  const hashedPassword = await bcrypt.hash('password123', 10)
 
   for (const business of businesses) {
     const now = new Date()
     const result = await client.query(
       `INSERT INTO "Business" (
-        "businessName", "ownerName", "ownerEmail", "ownerPhone",
+        "businessName", "ownerName", "ownerEmail", "password", "ownerPhone",
         "phoneNumberId", "wabaId", "location", "deliveryInfo",
         "paymentInfo", "businessDescription", "products",
         "botActive", "plan", "createdAt", "updatedAt"
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
       ON CONFLICT ("ownerEmail") DO UPDATE SET
         "businessName" = EXCLUDED."businessName",
         "ownerName" = EXCLUDED."ownerName",
+        "password" = EXCLUDED."password",
         "ownerPhone" = EXCLUDED."ownerPhone",
         "phoneNumberId" = EXCLUDED."phoneNumberId",
         "wabaId" = EXCLUDED."wabaId",
@@ -139,6 +142,7 @@ async function seedBusinesses(client: PoolClient): Promise<number[]> {
         business.businessName,
         business.ownerName,
         business.ownerEmail,
+        hashedPassword,
         business.ownerPhone,
         business.phoneNumberId,
         business.wabaId,
