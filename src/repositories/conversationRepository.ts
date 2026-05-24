@@ -1,4 +1,4 @@
-export async function upsertConversation(client: any, businessId: number, customerPhone: string) {
+export async function upsertConversation(client: any, businessId: string, customerPhone: string) {
   const res = await client.query(
     `INSERT INTO "Conversation" ("businessId", "customerPhone", "createdAt", "lastMessageAt")
      VALUES ($1, $2, NOW(), NOW())
@@ -9,7 +9,7 @@ export async function upsertConversation(client: any, businessId: number, custom
   return res.rows[0].id
 }
 
-export async function getRecentMessages(client: any, conversationId: number, limit = 10) {
+export async function getRecentMessages(client: any, conversationId: string, limit = 10) {
   const res = await client.query(
     `SELECT role, content FROM "Message" WHERE "conversationId" = $1 ORDER BY "createdAt" DESC LIMIT $2`,
     [conversationId, limit]

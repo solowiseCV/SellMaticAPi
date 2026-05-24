@@ -4,3 +4,5 @@ node_modules
 .env.docker
 /src/generated/prisma
 /src/index2.ts
+
+/dist

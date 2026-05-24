@@ -22,8 +22,8 @@ const conversationIntros = [
   'Is this available in my size?'
 ]
 
-async function seedConversations(client: PoolClient, businessIds: number[]): Promise<number[]> {
-  const conversationIds: number[] = []
+async function seedConversations(client: PoolClient, businessIds: string[]): Promise<string[]> {
+  const conversationIds: string[] = []
   let phoneIndex = 0
 
   for (const businessId of businessIds) {
