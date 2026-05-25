@@ -20,11 +20,11 @@ export async function getRecentMessages(client: any, conversationId: string, lim
 
 export async function isConversationPaused(
   client: any,
-  conversationId: number
+  conversationId: string
 ): Promise<boolean> {
   const result = await client.query(
-    `SELECT human_takeover FROM Conversation WHERE id = $1`,
+    `SELECT "humanTakeover" FROM "Conversation" WHERE id = $1`,
     [conversationId]
   )
-  return result.rows[0]?.human_takeover || false
+  return result.rows[0]?.humanTakeover || false
 }
