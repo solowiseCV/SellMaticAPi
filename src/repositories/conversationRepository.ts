@@ -23,7 +23,7 @@ export async function isConversationPaused(
   conversationId: number
 ): Promise<boolean> {
   const result = await client.query(
-    `SELECT human_takeover FROM conversations WHERE id = $1`,
+    `SELECT human_takeover FROM Conversation WHERE id = $1`,
     [conversationId]
   )
   return result.rows[0]?.human_takeover || false
