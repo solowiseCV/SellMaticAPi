@@ -14,7 +14,7 @@ export class BotControlService {
       conversationId,
       businessId
     )
-
+ console.log('Found conversation:', conversation)
     if (!conversation) {
       throw new Error('Conversation not found')
     }
