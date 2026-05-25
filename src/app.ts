@@ -2,12 +2,13 @@ import express, { Request, Response } from 'express'
 import webhookRoutes from './routes/webhook'
 import authRoutes from './routes/auth.route'
 import whatsappRoutes from './routes/whatsapp.route'
+import botControlRoutes from './routes/botControlRoute'
 
 const app = express()
 
 app.use(express.json())
 
-// Allow cross-origin requests from the frontend
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS')
@@ -28,9 +29,11 @@ app.get('/health', (_req: Request, res: Response) => {
 app.use('/auth', authRoutes)
 app.use('/whatsapp', whatsappRoutes)
 app.use('/webhook', webhookRoutes)
-app.use('/', webhookRoutes) // Meta webhook fallback
+app.use('/bot', botControlRoutes)
+app.use('/', webhookRoutes) 
 
-// 404 handler for unmatched routes
+
+
 app.use((_req: Request, res: Response) => {
   res.status(404).json({ success: false, error: 'Route not found.' })
 })

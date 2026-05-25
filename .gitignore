@@ -2,6 +2,7 @@ node_modules
 # Keep environment variables out of version control
 .env
 .env.docker
+.todo.txt
 # /src/generated/prisma
 /src/index2.ts
 

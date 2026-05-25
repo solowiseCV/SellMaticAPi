@@ -104,7 +104,10 @@ export const ConversationScalarFieldEnum = {
   businessId: 'businessId',
   customerPhone: 'customerPhone',
   createdAt: 'createdAt',
-  lastMessageAt: 'lastMessageAt'
+  lastMessageAt: 'lastMessageAt',
+  humanTakeover: 'humanTakeover',
+  takeoverAt: 'takeoverAt',
+  takeoverResumedAt: 'takeoverResumedAt'
 } as const
 
 export type ConversationScalarFieldEnum = (typeof ConversationScalarFieldEnum)[keyof typeof ConversationScalarFieldEnum]

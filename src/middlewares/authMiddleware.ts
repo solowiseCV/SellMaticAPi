@@ -12,9 +12,8 @@ export const requireAuth = (
   next: NextFunction
 ): void => {
   try {
-    // Get token from Authorization header
-    const authHeader = req.headers.authorization
-    
+    const authHeader = req.headers.authorization as string
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       res.status(401).json({
         success: false,
@@ -25,13 +24,11 @@ export const requireAuth = (
 
     const token = authHeader.split(' ')[1]
 
-    // Verify token
     const decoded = jwt.verify(
       token,
       process.env.NEXTAUTH_SECRET as string
-    ) as any
+    ) as jwt.JwtPayload
 
-    // Attach businessId to request
     req.businessId = decoded.id
     req.businessEmail = decoded.email
 
