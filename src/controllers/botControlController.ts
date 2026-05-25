@@ -10,7 +10,7 @@ export class BotControlController {
   ): Promise<void> {
     const conversationId = req.params.conversationId as string
     const businessId = req.businessId!
-
+       console.log(`Pause request: conversation ${conversationId}, business ${businessId}`)
     try {
       await BotControlService.pauseConversation(conversationId, businessId)
       res.status(200).json({
