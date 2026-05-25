@@ -1,11 +1,5 @@
 import pool from '../db/pool'
-
-export interface BusinessRecord {
-  id: string
-  businessName: string
-  phoneNumberId: string | null
-  botActive: boolean
-}
+import { BusinessRecord } from '../types/business'
 
 export class WhatsAppRepository {
 

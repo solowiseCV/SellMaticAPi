@@ -7,29 +7,39 @@ datasource db {
   provider = "postgresql"
 }
 
+
 model Business {
-  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  businessName        String
-  ownerName           String
-  ownerEmail          String   @unique
-  password            String
-  ownerPhone          String
-  phoneNumberId       String?  @unique
-  wabaId              String?
-  accessToken         String?
-  location            String?
-  deliveryInfo        String?
-  paymentInfo         String?
-  businessDescription String?
-  products            Json     @default("[]")
-  botActive           Boolean  @default(true)
-  botPersonality      String   @default("friendly and professional")
-  plan                String   @default("free_trial")
-  trialEndsAt         DateTime?
-  subscriptionActive  Boolean  @default(true)
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-  conversations       Conversation[]
+  id                      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  businessName            String
+  ownerName               String
+  ownerEmail              String    @unique
+  password                String
+  ownerPhone              String
+  phoneNumberId           String?   @unique
+  wabaId                  String?
+  accessToken             String?
+  location                String?
+  deliveryInfo            String?
+  paymentInfo             String?
+  businessDescription     String?
+  products                Json      @default("[]")
+  botActive               Boolean   @default(true)
+  botPersonality          String    @default("friendly and professional")
+  plan                    String    @default("free_trial")
+  trialEndsAt             DateTime?
+  subscriptionActive      Boolean   @default(true)
+
+  // ✅ Auth fields
+  emailVerified           Boolean   @default(false)
+  emailVerificationToken  String?
+  passwordResetToken      String?
+  passwordResetExpires    DateTime?
+  onboardingCompleted     Boolean   @default(false)
+  lastLoginAt             DateTime?
+
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+  conversations           Conversation[]
 }
 
 model Conversation {

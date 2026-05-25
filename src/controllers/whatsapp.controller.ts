@@ -9,7 +9,7 @@ export class WhatsAppController {
     req: AuthenticatedRequest,
     res: Response
   ): Promise<void> {
-    const businessId = req.businessId !
+    const businessId = req.businessId!
 
     const validation = WhatsAppValidation.addNumber(req.body)
     if (!validation.valid) {

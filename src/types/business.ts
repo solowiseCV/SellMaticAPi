@@ -1,20 +1,42 @@
-export interface Business {
-  id: number
-  business_name: string
-  owner_name: string
-  owner_email: string
-  owner_phone: string
-  password_hash: string
-  email_verified: boolean
-  email_verification_token: string | null
-  password_reset_token: string | null
-  password_reset_expires: Date | null
-  plan: string
-  subscription_active: boolean
-  trial_ends_at: Date | null
+
+
+
+export interface BusinessRecord {
+  id: string
+  businessName: string
+  phoneNumberId: string | null
   botActive: boolean
-  onboarding_completed: boolean
-  created_at: Date
+}
+
+
+export interface Business {
+  id: string
+  businessName: string
+  ownerName: string
+  ownerEmail: string
+  password: string
+  ownerPhone: string
+  phoneNumberId: string | null
+  wabaId: string | null
+  accessToken: string | null
+  location: string | null
+  deliveryInfo: string | null
+  paymentInfo: string | null
+  businessDescription: string | null
+  products: any[]
+  botActive: boolean
+  botPersonality: string
+  plan: string
+  trialEndsAt: Date | null
+  subscriptionActive: boolean
+  emailVerified: boolean
+  emailVerificationToken: string | null
+  passwordResetToken: string | null
+  passwordResetExpires: Date | null
+  onboardingCompleted: boolean
+  lastLoginAt: Date | null
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface CreateBusinessInput {
