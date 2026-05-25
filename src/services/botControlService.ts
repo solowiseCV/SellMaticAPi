@@ -1,5 +1,5 @@
 import { WhatsAppRepository } from '../repositories/whatsappRepository'
-import { AuthRepository } from './authRepository'
+import { AuthRepository } from '../repositories/authRepository'
 
 export class BotControlService {
 
