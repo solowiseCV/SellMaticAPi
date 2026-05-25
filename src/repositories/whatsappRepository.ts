@@ -2,22 +2,22 @@ import pool from '../db/pool'
 
 export interface BusinessRecord {
   id: string
-  business_name: string
-  phone_number_id: string | null
-  bot_active: boolean
+  businessName: string
+  phoneNumberId: string | null
+  botActive: boolean
 }
 
 export class WhatsAppRepository {
 
-  
+  // Save phone number before full activation
   static async savePendingPhoneNumber(
     businessId: string,
     phoneNumberId: string
   ): Promise<void> {
     await pool.query(
-      `UPDATE businesses 
-       SET phone_number_id = $1,
-           updated_at = NOW()
+      `UPDATE "Business" 
+       SET "phoneNumberId" = $1,
+           "updatedAt" = NOW()
        WHERE id = $2`,
       [phoneNumberId, businessId]
     )
@@ -29,23 +29,30 @@ export class WhatsAppRepository {
     phoneNumberId: string
   ): Promise<void> {
     await pool.query(
-      `UPDATE businesses
-       SET phone_number_id = $1,
-           bot_active = true,
-           updated_at = NOW()
+      `UPDATE "Business"
+       SET "phoneNumberId" = $1,
+           "botActive" = true,
+           "updatedAt" = NOW()
        WHERE id = $2`,
       [phoneNumberId, businessId]
     )
   }
 
   // Get business by ID
-  static async findById(businessId: string): Promise<BusinessRecord | null> {
+  static async findById(
+    businessId: string
+  ): Promise<BusinessRecord | null> {
     const result = await pool.query(
-      `SELECT id, business_name, phone_number_id, bot_active
-       FROM businesses
+      `SELECT 
+          id,
+          "businessName",
+          "phoneNumberId",
+          "botActive"
+       FROM "Business"
        WHERE id = $1`,
       [businessId]
     )
+
     return result.rows[0] || null
   }
 
@@ -54,115 +61,140 @@ export class WhatsAppRepository {
     phoneNumberId: string
   ): Promise<BusinessRecord | null> {
     const result = await pool.query(
-      `SELECT id, business_name, phone_number_id, bot_active
-       FROM businesses
-       WHERE phone_number_id = $1`,
+      `SELECT 
+          id,
+          "businessName",
+          "phoneNumberId",
+          "botActive"
+       FROM "Business"
+       WHERE "phoneNumberId" = $1`,
       [phoneNumberId]
     )
+
     return result.rows[0] || null
   }
 
   // Deactivate bot (disconnect number)
-  static async deactivateBusiness(businessId: string): Promise<void> {
+  static async deactivateBusiness(
+    businessId: string
+  ): Promise<void> {
     await pool.query(
-      `UPDATE businesses
-       SET bot_active = false,
-           updated_at = NOW()
+      `UPDATE "Business"
+       SET "botActive" = false,
+           "updatedAt" = NOW()
        WHERE id = $1`,
       [businessId]
     )
   }
 
   // Clear phone number (full disconnect)
-  static async clearPhoneNumber(businessId: string): Promise<void> {
+  static async clearPhoneNumber(
+    businessId: string
+  ): Promise<void> {
     await pool.query(
-      `UPDATE businesses
-       SET phone_number_id = NULL,
-           bot_active = false,
-           updated_at = NOW()
+      `UPDATE "Business"
+       SET "phoneNumberId" = NULL,
+           "botActive" = false,
+           "updatedAt" = NOW()
        WHERE id = $1`,
       [businessId]
     )
   }
 
   // Pause bot for one conversation
-static async pauseConversation(conversationId: string): Promise<void> {
-  await pool.query(
-    `UPDATE conversations
-     SET human_takeover = true,
-         takeover_at = NOW()
-     WHERE id = $1`,
-    [conversationId]
-  )
-}
+  static async pauseConversation(
+    conversationId: string
+  ): Promise<void> {
+    await pool.query(
+      `UPDATE "Conversation"
+       SET "humanTakeover" = true,
+           "takeoverAt" = NOW()
+       WHERE id = $1`,
+      [conversationId]
+    )
+  }
 
-// Resume bot for one conversation
-static async resumeConversation(conversationId: string): Promise<void> {
-  await pool.query(
-    `UPDATE conversations
-     SET human_takeover = false,
-         takeover_resumed_at = NOW()
-     WHERE id = $1`,
-    [conversationId]
-  )
-}
+  // Resume bot for one conversation
+  static async resumeConversation(
+    conversationId: string
+  ): Promise<void> {
+    await pool.query(
+      `UPDATE "Conversation"
+       SET "humanTakeover" = false,
+           "takeoverResumedAt" = NOW()
+       WHERE id = $1`,
+      [conversationId]
+    )
+  }
 
-// Check if conversation is in human takeover mode
-static async isConversationPaused(
-  conversationId: string
-): Promise<boolean> {
-  const result = await pool.query(
-    `SELECT human_takeover FROM conversations WHERE id = $1`,
-    [conversationId]
-  )
-  return result.rows[0]?.human_takeover || false
-}
+  // Check if conversation is in human takeover mode
+  static async isConversationPaused(
+    conversationId: string
+  ): Promise<boolean> {
+    const result = await pool.query(
+      `SELECT "humanTakeover"
+       FROM "Conversation"
+       WHERE id = $1`,
+      [conversationId]
+    )
 
-// Get conversation by ID (verify it belongs to this business)
-static async findConversationById(
-  conversationId: string,
-  businessId: string
-): Promise<any | null> {
-  const result = await pool.query(
-    `SELECT * FROM conversations 
-     WHERE id = $1 AND business_id = $2`,
-    [conversationId, businessId]
-  )
-  return result.rows[0] || null
-}
+    return result.rows[0]?.humanTakeover ?? false
+  }
 
-// Global bot pause
-static async pauseAllConversations(businessId: string): Promise<void> {
-  await pool.query(
-    `UPDATE businesses
-     SET bot_active = false,
-         updated_at = NOW()
-     WHERE id = $1`,
-    [businessId]
-  )
-}
+  // Get conversation by ID and verify ownership
+  static async findConversationById(
+    conversationId: string,
+    businessId: string
+  ): Promise<any | null> {
+    const result = await pool.query(
+      `SELECT *
+       FROM "Conversation"
+       WHERE id = $1
+       AND "businessId" = $2`,
+      [conversationId, businessId]
+    )
 
-// Global bot resume
-static async resumeAllConversations(businessId: string): Promise<void> {
-  await pool.query(
-    `UPDATE businesses
-     SET bot_active = true,
-         updated_at = NOW()
-     WHERE id = $1`,
-    [businessId]
-  )
-}
+    return result.rows[0] || null
+  }
 
+  // Pause all conversations globally
+  static async pauseAllConversations(
+    businessId: string
+  ): Promise<void> {
+    await pool.query(
+      `UPDATE "Business"
+       SET "botActive" = false,
+           "updatedAt" = NOW()
+       WHERE id = $1`,
+      [businessId]
+    )
+  }
 
-static async countPausedConversations(
-  businessId: string
-): Promise<number> {
-  const result = await pool.query(
-    `SELECT COUNT(*) FROM conversations
-     WHERE business_id = $1 AND human_takeover = true`,
-    [businessId]
-  )
-  return parseInt(result.rows[0].count)
-}
-}
+  // Resume all conversations globally
+  static async resumeAllConversations(
+    businessId: string
+  ): Promise<void> {
+    await pool.query(
+      `UPDATE "Business"
+       SET "botActive" = true,
+           "updatedAt" = NOW()
+       WHERE id = $1`,
+      [businessId]
+    )
+  }
 
+  // Count paused conversations
+  static async countPausedConversations(
+    businessId: string
+  ): Promise<number> {
+    const result = await pool.query(
+      `SELECT COUNT(*)::int AS count
+       FROM "Conversation"
+       WHERE "businessId" = $1
+       AND "humanTakeover" = true`,
+      [businessId]
+    )
+
+    return result.rows[0]?.count ?? 0
+  }
+}
