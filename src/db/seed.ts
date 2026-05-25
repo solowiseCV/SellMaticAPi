@@ -7,7 +7,7 @@ async function seed() {
   const client = await pool.connect()
 
   try {
-    console.log('🌱 Starting database seed...')
+    console.log('Starting database seed...')
     await client.query('BEGIN')
 
     console.log('Clearing existing data...')
@@ -20,16 +20,16 @@ async function seed() {
     console.log(`Created ${businessIds.length} businesses`)
 
     const conversationIds = await seedConversations(client, businessIds)
-    console.log(`💬 Created ${conversationIds.length} conversations`)
+    console.log(`Created ${conversationIds.length} conversations`)
 
     const messageCount = await seedMessages(client, conversationIds)
-    console.log(`📨 Created ${messageCount} messages`)
+    console.log(`Created ${messageCount} messages`)
 
     await client.query('COMMIT')
-    console.log('🎉 Database seed completed successfully')
+    console.log('Database seed completed successfully')
   } catch (err) {
     await client.query('ROLLBACK')
-    console.error('❌ Seed error:', err)
+    console.error('Seed error:', err)
     process.exit(1)
   } finally {
     client.release()

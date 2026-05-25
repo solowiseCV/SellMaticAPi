@@ -14,12 +14,11 @@ export class BotControlService {
       conversationId,
       businessId
     )
- console.log('Found conversation:', conversation)
     if (!conversation) {
       throw new Error('Conversation not found')
     }
 
-    if (conversation.human_takeover) {
+    if (conversation.humanTakeover) {
       throw new Error('Bot is already paused for this conversation')
     }
 
@@ -41,7 +40,7 @@ export class BotControlService {
       throw new Error('Conversation not found')
     }
 
-    if (!conversation.human_takeover) {
+    if (!conversation.humanTakeover) {
       throw new Error('Bot is already active for this conversation')
     }
 
@@ -54,7 +53,7 @@ export class BotControlService {
     const business = await AuthRepository.findById(businessId)
     if (!business) throw new Error('Business not found')
 
-    if (!business.bot_active) {
+    if (!business.botActive) {
       throw new Error('Bot is already paused')
     }
 
@@ -67,7 +66,7 @@ export class BotControlService {
     const business = await AuthRepository.findById(businessId)
     if (!business) throw new Error('Business not found')
 
-    if (business.bot_active) {
+    if (business.botActive) {
       throw new Error('Bot is already active')
     }
 
@@ -88,7 +87,7 @@ export class BotControlService {
     )
 
     return {
-      globallyActive: business.bot_active,
+      globallyActive: business.botActive,
       pausedConversations: result
     }
   }
