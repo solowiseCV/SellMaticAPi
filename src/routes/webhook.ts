@@ -1,9 +1,9 @@
 import { Router } from 'express'
 import { handleWebhookVerification, handleIncomingWebhook } from '../controllers/webhookController'
 
-const router = Router()
+const webhookRoutes = Router()
 
-router.get('/', handleWebhookVerification)
-router.post('/', handleIncomingWebhook)
+webhookRoutes.get('/', handleWebhookVerification)
+webhookRoutes.post('/', handleIncomingWebhook)
 
-export default router
+export default webhookRoutes

@@ -30,6 +30,9 @@ export type ConversationMinAggregateOutputType = {
   customerPhone: string | null
   createdAt: Date | null
   lastMessageAt: Date | null
+  humanTakeover: boolean | null
+  takeoverAt: Date | null
+  takeoverResumedAt: Date | null
 }
 
 export type ConversationMaxAggregateOutputType = {
@@ -38,6 +41,9 @@ export type ConversationMaxAggregateOutputType = {
   customerPhone: string | null
   createdAt: Date | null
   lastMessageAt: Date | null
+  humanTakeover: boolean | null
+  takeoverAt: Date | null
+  takeoverResumedAt: Date | null
 }
 
 export type ConversationCountAggregateOutputType = {
@@ -46,6 +52,9 @@ export type ConversationCountAggregateOutputType = {
   customerPhone: number
   createdAt: number
   lastMessageAt: number
+  humanTakeover: number
+  takeoverAt: number
+  takeoverResumedAt: number
   _all: number
 }
 
@@ -56,6 +65,9 @@ export type ConversationMinAggregateInputType = {
   customerPhone?: true
   createdAt?: true
   lastMessageAt?: true
+  humanTakeover?: true
+  takeoverAt?: true
+  takeoverResumedAt?: true
 }
 
 export type ConversationMaxAggregateInputType = {
@@ -64,6 +76,9 @@ export type ConversationMaxAggregateInputType = {
   customerPhone?: true
   createdAt?: true
   lastMessageAt?: true
+  humanTakeover?: true
+  takeoverAt?: true
+  takeoverResumedAt?: true
 }
 
 export type ConversationCountAggregateInputType = {
@@ -72,6 +87,9 @@ export type ConversationCountAggregateInputType = {
   customerPhone?: true
   createdAt?: true
   lastMessageAt?: true
+  humanTakeover?: true
+  takeoverAt?: true
+  takeoverResumedAt?: true
   _all?: true
 }
 
@@ -153,6 +171,9 @@ export type ConversationGroupByOutputType = {
   customerPhone: string
   createdAt: Date
   lastMessageAt: Date
+  humanTakeover: boolean
+  takeoverAt: Date | null
+  takeoverResumedAt: Date | null
   _count: ConversationCountAggregateOutputType | null
   _min: ConversationMinAggregateOutputType | null
   _max: ConversationMaxAggregateOutputType | null
@@ -182,6 +203,9 @@ export type ConversationWhereInput = {
   customerPhone?: Prisma.StringFilter<"Conversation"> | string
   createdAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
   lastMessageAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
+  humanTakeover?: Prisma.BoolFilter<"Conversation"> | boolean
+  takeoverAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
+  takeoverResumedAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   messages?: Prisma.MessageListRelationFilter
 }
@@ -192,6 +216,9 @@ export type ConversationOrderByWithRelationInput = {
   customerPhone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrder
+  humanTakeover?: Prisma.SortOrder
+  takeoverAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  takeoverResumedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   business?: Prisma.BusinessOrderByWithRelationInput
   messages?: Prisma.MessageOrderByRelationAggregateInput
 }
@@ -206,6 +233,9 @@ export type ConversationWhereUniqueInput = Prisma.AtLeast<{
   customerPhone?: Prisma.StringFilter<"Conversation"> | string
   createdAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
   lastMessageAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
+  humanTakeover?: Prisma.BoolFilter<"Conversation"> | boolean
+  takeoverAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
+  takeoverResumedAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
   business?: Prisma.XOR<Prisma.BusinessScalarRelationFilter, Prisma.BusinessWhereInput>
   messages?: Prisma.MessageListRelationFilter
 }, "id" | "businessId_customerPhone">
@@ -216,6 +246,9 @@ export type ConversationOrderByWithAggregationInput = {
   customerPhone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrder
+  humanTakeover?: Prisma.SortOrder
+  takeoverAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  takeoverResumedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ConversationCountOrderByAggregateInput
   _max?: Prisma.ConversationMaxOrderByAggregateInput
   _min?: Prisma.ConversationMinOrderByAggregateInput
@@ -230,6 +263,9 @@ export type ConversationScalarWhereWithAggregatesInput = {
   customerPhone?: Prisma.StringWithAggregatesFilter<"Conversation"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Conversation"> | Date | string
   lastMessageAt?: Prisma.DateTimeWithAggregatesFilter<"Conversation"> | Date | string
+  humanTakeover?: Prisma.BoolWithAggregatesFilter<"Conversation"> | boolean
+  takeoverAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Conversation"> | Date | string | null
+  takeoverResumedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Conversation"> | Date | string | null
 }
 
 export type ConversationCreateInput = {
@@ -237,6 +273,9 @@ export type ConversationCreateInput = {
   customerPhone: string
   createdAt?: Date | string
   lastMessageAt?: Date | string
+  humanTakeover?: boolean
+  takeoverAt?: Date | string | null
+  takeoverResumedAt?: Date | string | null
   business: Prisma.BusinessCreateNestedOneWithoutConversationsInput
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
 }
@@ -247,6 +286,9 @@ export type ConversationUncheckedCreateInput = {
   customerPhone: string
   createdAt?: Date | string
   lastMessageAt?: Date | string
+  humanTakeover?: boolean
+  takeoverAt?: Date | string | null
+  takeoverResumedAt?: Date | string | null
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
 }
 
@@ -255,6 +297,9 @@ export type ConversationUpdateInput = {
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  humanTakeover?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  takeoverAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  takeoverResumedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   business?: Prisma.BusinessUpdateOneRequiredWithoutConversationsNestedInput
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
 }
@@ -265,6 +310,9 @@ export type ConversationUncheckedUpdateInput = {
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  humanTakeover?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  takeoverAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  takeoverResumedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
 }
 
@@ -274,6 +322,9 @@ export type ConversationCreateManyInput = {
   customerPhone: string
   createdAt?: Date | string
   lastMessageAt?: Date | string
+  humanTakeover?: boolean
+  takeoverAt?: Date | string | null
+  takeoverResumedAt?: Date | string | null
 }
 
 export type ConversationUpdateManyMutationInput = {
@@ -281,6 +332,9 @@ export type ConversationUpdateManyMutationInput = {
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  humanTakeover?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  takeoverAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  takeoverResumedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ConversationUncheckedUpdateManyInput = {
@@ -289,6 +343,9 @@ export type ConversationUncheckedUpdateManyInput = {
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  humanTakeover?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  takeoverAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  takeoverResumedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ConversationListRelationFilter = {
@@ -312,6 +369,9 @@ export type ConversationCountOrderByAggregateInput = {
   customerPhone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrder
+  humanTakeover?: Prisma.SortOrder
+  takeoverAt?: Prisma.SortOrder
+  takeoverResumedAt?: Prisma.SortOrder
 }
 
 export type ConversationMaxOrderByAggregateInput = {
@@ -320,6 +380,9 @@ export type ConversationMaxOrderByAggregateInput = {
   customerPhone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrder
+  humanTakeover?: Prisma.SortOrder
+  takeoverAt?: Prisma.SortOrder
+  takeoverResumedAt?: Prisma.SortOrder
 }
 
 export type ConversationMinOrderByAggregateInput = {
@@ -328,6 +391,9 @@ export type ConversationMinOrderByAggregateInput = {
   customerPhone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lastMessageAt?: Prisma.SortOrder
+  humanTakeover?: Prisma.SortOrder
+  takeoverAt?: Prisma.SortOrder
+  takeoverResumedAt?: Prisma.SortOrder
 }
 
 export type ConversationScalarRelationFilter = {
@@ -396,6 +462,9 @@ export type ConversationCreateWithoutBusinessInput = {
   customerPhone: string
   createdAt?: Date | string
   lastMessageAt?: Date | string
+  humanTakeover?: boolean
+  takeoverAt?: Date | string | null
+  takeoverResumedAt?: Date | string | null
   messages?: Prisma.MessageCreateNestedManyWithoutConversationInput
 }
 
@@ -404,6 +473,9 @@ export type ConversationUncheckedCreateWithoutBusinessInput = {
   customerPhone: string
   createdAt?: Date | string
   lastMessageAt?: Date | string
+  humanTakeover?: boolean
+  takeoverAt?: Date | string | null
+  takeoverResumedAt?: Date | string | null
   messages?: Prisma.MessageUncheckedCreateNestedManyWithoutConversationInput
 }
 
@@ -442,6 +514,9 @@ export type ConversationScalarWhereInput = {
   customerPhone?: Prisma.StringFilter<"Conversation"> | string
   createdAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
   lastMessageAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
+  humanTakeover?: Prisma.BoolFilter<"Conversation"> | boolean
+  takeoverAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
+  takeoverResumedAt?: Prisma.DateTimeNullableFilter<"Conversation"> | Date | string | null
 }
 
 export type ConversationCreateWithoutMessagesInput = {
@@ -449,6 +524,9 @@ export type ConversationCreateWithoutMessagesInput = {
   customerPhone: string
   createdAt?: Date | string
   lastMessageAt?: Date | string
+  humanTakeover?: boolean
+  takeoverAt?: Date | string | null
+  takeoverResumedAt?: Date | string | null
   business: Prisma.BusinessCreateNestedOneWithoutConversationsInput
 }
 
@@ -458,6 +536,9 @@ export type ConversationUncheckedCreateWithoutMessagesInput = {
   customerPhone: string
   createdAt?: Date | string
   lastMessageAt?: Date | string
+  humanTakeover?: boolean
+  takeoverAt?: Date | string | null
+  takeoverResumedAt?: Date | string | null
 }
 
 export type ConversationCreateOrConnectWithoutMessagesInput = {
@@ -481,6 +562,9 @@ export type ConversationUpdateWithoutMessagesInput = {
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  humanTakeover?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  takeoverAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  takeoverResumedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   business?: Prisma.BusinessUpdateOneRequiredWithoutConversationsNestedInput
 }
 
@@ -490,6 +574,9 @@ export type ConversationUncheckedUpdateWithoutMessagesInput = {
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  humanTakeover?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  takeoverAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  takeoverResumedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ConversationCreateManyBusinessInput = {
@@ -497,6 +584,9 @@ export type ConversationCreateManyBusinessInput = {
   customerPhone: string
   createdAt?: Date | string
   lastMessageAt?: Date | string
+  humanTakeover?: boolean
+  takeoverAt?: Date | string | null
+  takeoverResumedAt?: Date | string | null
 }
 
 export type ConversationUpdateWithoutBusinessInput = {
@@ -504,6 +594,9 @@ export type ConversationUpdateWithoutBusinessInput = {
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  humanTakeover?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  takeoverAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  takeoverResumedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   messages?: Prisma.MessageUpdateManyWithoutConversationNestedInput
 }
 
@@ -512,6 +605,9 @@ export type ConversationUncheckedUpdateWithoutBusinessInput = {
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  humanTakeover?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  takeoverAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  takeoverResumedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   messages?: Prisma.MessageUncheckedUpdateManyWithoutConversationNestedInput
 }
 
@@ -520,6 +616,9 @@ export type ConversationUncheckedUpdateManyWithoutBusinessInput = {
   customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  humanTakeover?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  takeoverAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  takeoverResumedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -559,6 +658,9 @@ export type ConversationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   customerPhone?: boolean
   createdAt?: boolean
   lastMessageAt?: boolean
+  humanTakeover?: boolean
+  takeoverAt?: boolean
+  takeoverResumedAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   messages?: boolean | Prisma.Conversation$messagesArgs<ExtArgs>
   _count?: boolean | Prisma.ConversationCountOutputTypeDefaultArgs<ExtArgs>
@@ -570,6 +672,9 @@ export type ConversationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   customerPhone?: boolean
   createdAt?: boolean
   lastMessageAt?: boolean
+  humanTakeover?: boolean
+  takeoverAt?: boolean
+  takeoverResumedAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversation"]>
 
@@ -579,6 +684,9 @@ export type ConversationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   customerPhone?: boolean
   createdAt?: boolean
   lastMessageAt?: boolean
+  humanTakeover?: boolean
+  takeoverAt?: boolean
+  takeoverResumedAt?: boolean
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversation"]>
 
@@ -588,9 +696,12 @@ export type ConversationSelectScalar = {
   customerPhone?: boolean
   createdAt?: boolean
   lastMessageAt?: boolean
+  humanTakeover?: boolean
+  takeoverAt?: boolean
+  takeoverResumedAt?: boolean
 }
 
-export type ConversationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "customerPhone" | "createdAt" | "lastMessageAt", ExtArgs["result"]["conversation"]>
+export type ConversationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "businessId" | "customerPhone" | "createdAt" | "lastMessageAt" | "humanTakeover" | "takeoverAt" | "takeoverResumedAt", ExtArgs["result"]["conversation"]>
 export type ConversationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   business?: boolean | Prisma.BusinessDefaultArgs<ExtArgs>
   messages?: boolean | Prisma.Conversation$messagesArgs<ExtArgs>
@@ -615,6 +726,9 @@ export type $ConversationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     customerPhone: string
     createdAt: Date
     lastMessageAt: Date
+    humanTakeover: boolean
+    takeoverAt: Date | null
+    takeoverResumedAt: Date | null
   }, ExtArgs["result"]["conversation"]>
   composites: {}
 }
@@ -1045,6 +1159,9 @@ export interface ConversationFieldRefs {
   readonly customerPhone: Prisma.FieldRef<"Conversation", 'String'>
   readonly createdAt: Prisma.FieldRef<"Conversation", 'DateTime'>
   readonly lastMessageAt: Prisma.FieldRef<"Conversation", 'DateTime'>
+  readonly humanTakeover: Prisma.FieldRef<"Conversation", 'Boolean'>
+  readonly takeoverAt: Prisma.FieldRef<"Conversation", 'DateTime'>
+  readonly takeoverResumedAt: Prisma.FieldRef<"Conversation", 'DateTime'>
 }
     
 

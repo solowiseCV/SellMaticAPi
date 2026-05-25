@@ -1,4 +1,3 @@
-import { PoolClient } from 'pg'
 import pool from '../db/pool'
 
 export interface BusinessRecord {
@@ -85,4 +84,85 @@ export class WhatsAppRepository {
       [businessId]
     )
   }
+
+  // Pause bot for one conversation
+static async pauseConversation(conversationId: string): Promise<void> {
+  await pool.query(
+    `UPDATE conversations
+     SET human_takeover = true,
+         takeover_at = NOW()
+     WHERE id = $1`,
+    [conversationId]
+  )
 }
+
+// Resume bot for one conversation
+static async resumeConversation(conversationId: string): Promise<void> {
+  await pool.query(
+    `UPDATE conversations
+     SET human_takeover = false,
+         takeover_resumed_at = NOW()
+     WHERE id = $1`,
+    [conversationId]
+  )
+}
+
+// Check if conversation is in human takeover mode
+static async isConversationPaused(
+  conversationId: string
+): Promise<boolean> {
+  const result = await pool.query(
+    `SELECT human_takeover FROM conversations WHERE id = $1`,
+    [conversationId]
+  )
+  return result.rows[0]?.human_takeover || false
+}
+
+// Get conversation by ID (verify it belongs to this business)
+static async findConversationById(
+  conversationId: string,
+  businessId: string
+): Promise<any | null> {
+  const result = await pool.query(
+    `SELECT * FROM conversations 
+     WHERE id = $1 AND business_id = $2`,
+    [conversationId, businessId]
+  )
+  return result.rows[0] || null
+}
+
+// Global bot pause
+static async pauseAllConversations(businessId: string): Promise<void> {
+  await pool.query(
+    `UPDATE businesses
+     SET bot_active = false,
+         updated_at = NOW()
+     WHERE id = $1`,
+    [businessId]
+  )
+}
+
+// Global bot resume
+static async resumeAllConversations(businessId: string): Promise<void> {
+  await pool.query(
+    `UPDATE businesses
+     SET bot_active = true,
+         updated_at = NOW()
+     WHERE id = $1`,
+    [businessId]
+  )
+}
+
+
+static async countPausedConversations(
+  businessId: string
+): Promise<number> {
+  const result = await pool.query(
+    `SELECT COUNT(*) FROM conversations
+     WHERE business_id = $1 AND human_takeover = true`,
+    [businessId]
+  )
+  return parseInt(result.rows[0].count)
+}
+}
+

@@ -16,3 +16,15 @@ export async function getRecentMessages(client: any, conversationId: string, lim
   )
   return res.rows.reverse().map((r: any) => ({ role: r.role, content: r.content }))
 }
+
+
+export async function isConversationPaused(
+  client: any,
+  conversationId: number
+): Promise<boolean> {
+  const result = await client.query(
+    `SELECT human_takeover FROM conversations WHERE id = $1`,
+    [conversationId]
+  )
+  return result.rows[0]?.human_takeover || false
+}
