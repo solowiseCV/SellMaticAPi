@@ -38,26 +38,37 @@ export class WhatsAppService {
     throw new Error('Business not found')
   }
 
-  console.log(`📞 Adding number for business ${businessId}: ${local}`)
+  console.log(`📞 Adding number for business ${business}: ${local}`)
 
   // Step 1a — Add number to WABA
-  let phoneNumberId: string
-  try {
-    const addResponse = await axios.post(
-      `${GRAPH_URL}/${WABA_ID}/phone_numbers`,
-      {
-        cc: '234',
-        phone_number: local,
-        migrate_whatsapp_number: false,
-        verified_name: business.businessName // ✅ Required by Meta
-      },
-      { headers: metaHeaders }
-    )
-    phoneNumberId = addResponse.data.id
-  } catch (err: any) {
-    const metaError = err.response?.data?.error?.message
-    throw new Error(metaError || 'Failed to add phone number to WhatsApp')
-  }
+   // Step 1a — Add number to WABA
+let phoneNumberId: string
+try {
+  const addResponse = await axios.post(
+    `${GRAPH_URL}/${WABA_ID}/phone_numbers`,
+    {
+      cc: '234',
+      phone_number: local,
+      migrate_whatsapp_number: false,
+      verified_name: business.businessName
+    },
+    { headers: metaHeaders }
+  )
+  phoneNumberId = addResponse.data.id
+} catch (err: any) {
+  // Log the FULL Meta error response
+  console.error('Meta add number full error:', JSON.stringify(err.response?.data, null, 2))
+  console.error('Meta error status:', err.response?.status)
+  console.error('Meta error headers:', err.response?.headers)
+  
+  const metaError = err.response?.data?.error?.message
+  const metaCode = err.response?.data?.error?.code
+  const metaSubcode = err.response?.data?.error?.error_subcode
+  
+  throw new Error(
+    `Meta Error ${metaCode}/${metaSubcode}: ${metaError || 'Unknown error'}`
+  )
+}
 
   // Step 1b — Request OTP
   try {
