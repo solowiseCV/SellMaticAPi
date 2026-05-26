@@ -25,94 +25,64 @@ const metaHeaders = {
 export class WhatsAppService {
 
   // Add phone number to Meta
-  static async addNumber(
-    phoneNumber: string,
-    verificationMethod: 'sms' | 'voice',
-    businessId: string
-  ): Promise<AddNumberResult> {
+ static async addNumber(
+  phoneNumber: string,
+  verificationMethod: 'sms' | 'voice',
+  businessId: string
+): Promise<AddNumberResult> {
 
-    // Clean the phone number
-    const { local } =
-      WhatsAppValidation.cleanPhoneNumber(phoneNumber)
+  const { local } = WhatsAppValidation.cleanPhoneNumber(phoneNumber)
 
-    // Verify business exists
-    const business =
-      await WhatsAppRepository.findById(businessId)
-
-    if (!business) {
-      throw new Error('Business not found')
-    }
-
-    let phoneNumberId: string
-
-    // Add number to WhatsApp Business
-    try {
-      const addResponse = await axios.post(
-        `${GRAPH_URL}/${WABA_ID}/phone_numbers`,
-        {
-          cc: '234',
-          phone_number: local,
-          migrate_whatsapp_number: false
-        },
-        { headers: metaHeaders }
-      )
-
-      phoneNumberId = addResponse.data.id
-
-    } catch (err: any) {
-
-      const metaError =
-        axios.isAxiosError(err)
-          ? err.response?.data?.error?.message
-          : null
-
-      throw new Error(
-        metaError || 'Failed to add phone number to WhatsApp'
-      )
-    }
-
-    // Request OTP code
-    try {
-      await axios.post(
-        `${GRAPH_URL}/${phoneNumberId}/request_code`,
-        {
-          code_method:
-            verificationMethod === 'sms'
-              ? 'SMS'
-              : 'VOICE',
-
-          language: 'en_US'
-        },
-        { headers: metaHeaders }
-      )
-
-    } catch (err: any) {
-
-      const metaError =
-        axios.isAxiosError(err)
-          ? err.response?.data?.error?.message
-          : null
-
-      throw new Error(
-        metaError || 'Failed to send verification code'
-      )
-    }
-
-    // Save pending number in database
-    await WhatsAppRepository.savePendingPhoneNumber(
-      businessId,
-      phoneNumberId
-    )
-
-    console.log(
-      `📱 Number added for business ${businessId}: ${phoneNumberId}`
-    )
-
-    return {
-      phoneNumberId,
-      message: 'Verification code sent successfully'
-    }
+  const business = await WhatsAppRepository.findById(businessId)
+  if (!business) {
+    throw new Error('Business not found')
   }
+
+  console.log(`📞 Adding number for business ${businessId}: ${local}`)
+
+  // Step 1a — Add number to WABA
+  let phoneNumberId: string
+  try {
+    const addResponse = await axios.post(
+      `${GRAPH_URL}/${WABA_ID}/phone_numbers`,
+      {
+        cc: '234',
+        phone_number: local,
+        migrate_whatsapp_number: false,
+        verified_name: business.businessName // ✅ Required by Meta
+      },
+      { headers: metaHeaders }
+    )
+    phoneNumberId = addResponse.data.id
+  } catch (err: any) {
+    const metaError = err.response?.data?.error?.message
+    throw new Error(metaError || 'Failed to add phone number to WhatsApp')
+  }
+
+  // Step 1b — Request OTP
+  try {
+    await axios.post(
+      `${GRAPH_URL}/${phoneNumberId}/request_code`,
+      {
+        code_method: verificationMethod === 'sms' ? 'SMS' : 'VOICE',
+        language: 'en_US'
+      },
+      { headers: metaHeaders }
+    )
+  } catch (err: any) {
+    const metaError = err.response?.data?.error?.message
+    throw new Error(metaError || 'Failed to send verification code')
+  }
+
+  await WhatsAppRepository.savePendingPhoneNumber(businessId, phoneNumberId)
+
+  console.log(`📱 Number added for business ${businessId}: ${phoneNumberId}`)
+
+  return {
+    phoneNumberId,
+    message: 'Verification code sent successfully'
+  }
+}
 
   // Verify OTP
   static async verifyNumber(
